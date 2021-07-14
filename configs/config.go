@@ -12,7 +12,13 @@ type HobbitConfig struct {
 }
 
 type Configs struct {
-	Registry string
+	Registry struct{
+		Scheme string
+		URL string
+		Port int
+		Username string
+		Password string
+	}
   	Images []string
 }
 
@@ -39,8 +45,8 @@ func (hcfg *HobbitConfig) LoadConfig(path string) *HobbitConfig {
 }
 
 func (hcfg *HobbitConfig) Validate() {
-	if hcfg.Configs.Registry == "" {
-		log.Fatal("[ ERROR ] - private registry not found in config file.")
+	if hcfg.Configs.Registry.URL == "" || hcfg.Configs.Registry.Port == 0 {
+		log.Fatal("[ ERROR ] - private registry url or port not found in config file.")
 	}
 	if len(hcfg.Configs.Images) == 0 {
 		log.Fatal("[ ERROR ] - you need at least one image to push to the remote registry.")
